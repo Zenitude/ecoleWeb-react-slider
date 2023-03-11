@@ -15,17 +15,33 @@ export default function Carousel() {
         if(e.target.parentElement.getAttribute('id') === 'previous') {
             let previousIndex = slideAnim.index - 1;
             
-            previousIndex < 1
-            ? setSlideAnim({...slideAnim, index: dataSlider.length})
-            : setSlideAnim({...slideAnim, index: previousIndex});
-            
+            if(previousIndex < 1 && slideAnim.inProgress === false) {
+                setSlideAnim({index: dataSlider.length, inProgress: true});
+                setTimeout(() => {
+                    setSlideAnim({index: dataSlider.length, inProgress: false})
+                }, 400);
+            } else {
+                setSlideAnim({index: previousIndex, inProgress:true});
+                setTimeout(() => {
+                    setSlideAnim({index: previousIndex, inProgress: false})
+                }, 400);
+            }
             
         } else if(e.target.parentElement.getAttribute('id') === 'next') {
             let nextIndex = slideAnim.index + 1;
             
-            nextIndex > dataSlider.length
-            ? setSlideAnim({...slideAnim, index: 1})
-            : setSlideAnim({...slideAnim, index: nextIndex});      
+            if(nextIndex > dataSlider.length && slideAnim.inProgress === false) {
+                setSlideAnim({index: 1, inProgress: true});
+                e.target.parentElement.setAttribute('disabled', '');
+                setTimeout(() => {
+                    setSlideAnim({index: 1, inProgress: false})
+                }, 1000)
+            } else {
+                setSlideAnim({index: nextIndex, inProgress: true}); 
+                setTimeout(() => {
+                    setSlideAnim({index: nextIndex, inProgress: false})
+                }, 1000);
+            }
         }
     }
 
